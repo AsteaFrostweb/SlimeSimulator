@@ -4,6 +4,7 @@
 Slime sim is a GPU agent simulaton. 
 Eac agent is represented as a coloured pixel on a texteue and moves around with a given speed and direction.
 Depending on their properties they will make all sorts of patters when attempting to follow the places where the trail is brightest.
+
 ---
 
 ## How To Run
@@ -11,7 +12,9 @@ Depending on their properties they will make all sorts of patters when attemptin
 2. Extract the zip file.  
 3. Run `SlimeSim.exe`.  
 4. Play around with the settings to see what you can make. (For a more detailed explaination of what the parameters do see below)
-   
+
+---
+### Example images
 ---
 <p align="center">
   <img src="/Screenies/Image_000.png" width="200" />
@@ -23,28 +26,20 @@ Depending on their properties they will make all sorts of patters when attemptin
 ---
 
 ## Features
-- Image Viewer  
-  - Load images in multiple formats (JPG, PNG, BMP, TIFF)
-  - Import images from scanner using WIA 
-  - Zoom with the mouse wheel  
-  - Pan with right-click drag  
+- Settings panel  
+   - Many variable parameters
+   - Custom colour picker
+   - Spawn center mode
+   - Bounce or wrapping mode
 
-- Crop Tool  
-  - Draw and adjust selection rectangles  
-  - Preview cropped image  
+- Agent Simulation  
+  - Easily handles > 2 million agents on a 2048x2048 render texture. (GTX 1660 SUPER 6GB) 
+  - Agents attempt to follow trails based on brightness
+  - Agents have a lifespan that can be extended by spending time on brighter pixels (this effect can be scaled by the blm or BrightnessLifetimeModifier)
+  - Agents sample 3 points in front of them offset by their "Sensor Angle" and at a distance from them of "Sensor Distance" pixels
 
-- OCR (Text Recognition)  
-  - Powered by [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)  
-  - Preprocessing images to improve recognition accuracy  
-  - Extracts characters (A-Z, 0-9, -, _)  
-
-- File Saving  
-  - Easily save cropped images using the parsed lot number as filename  
-  - Supports multiple output formats (JPG, PNG, BMP)  
-  - Save location can be set once and reused  
-
-
-
+- Image Saving
+  - Save button goes to "AppData/LocalLow/DefaultCompany/SlimeSim/"
 ---
 
 ## Development
