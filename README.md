@@ -14,10 +14,10 @@ Depending on their properties they will make all sorts of patters when attemptin
    
 ---
 <p align="center">
-  <img src="https://via.placeholder.com/200" width="200" />
-  <img src="https://via.placeholder.com/200" width="200" />
-  <img src="https://via.placeholder.com/200" width="200" />
-  <img src="https://via.placeholder.com/200" width="200" />
+  <img src="/Screenies/Image_000.png" width="200" />
+  <img src="Screenies/Image_001.jpg" width="200" />
+  <img src="Screenies/Image_002.jpg" width="200" />
+  <img src="Screenies/Image_003.jpg" width="200" />
 </p>
 
 ---
