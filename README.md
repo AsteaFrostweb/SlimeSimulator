@@ -43,8 +43,4 @@ Depending on their properties they will make all sorts of patters when attemptin
 ---
 
 ## Development
-1. Clone the repository and open it in Visual Studio 2019:
-2. Right click solution and "Restone NuGet Packages"
-
-```bash
-git clone https://github.com/yourusername/CoCSaver.git
+1. Clone the repository and load it up in Unity Editor.
