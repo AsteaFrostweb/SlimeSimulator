@@ -1,0 +1,87 @@
+#include "Agents.hlsl"
+#include "Diffuse.hlsl"
+#include "MathHelpers.hlsl"
+
+cbuffer Params
+{
+    float deltaTime;
+    float threshold;
+    int agentCount;
+    float2 _padding0;
+    float sensorDistance;
+    float sensorAngle;
+    float brightnessLifetimeScalar;
+    float wallAvoidanceStrength;
+    float turnSpeed;
+    bool bounce;
+    float4 TRAIL_INTENSITY;
+    float PASSIVE_TRAIL_DIFFUSION_FACTOR;
+    float PASSIVE_TRAIL_RECUCTION;
+    float2 _padding1;
+};
+
+RWStructuredBuffer<Agent> agents;
+RWStructuredBuffer<uint> deadAgents;
+RWStructuredBuffer<uint> deadAgentCount;
+RWTexture2D<float4> trailMap;
+
+// Agent kernel
+#pragma kernel CSMain
+[numthreads(1024, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    uint index = id.x;
+    if (index >= agentCount)
+        return;
+
+    //Retreive agent from thread ID
+    Agent a = agents[index];
+    
+    //Return in agent is dead
+    if (a.alive == 0)   return;
+    
+    //Decay agents life
+    DecayLifetime(a, deltaTime, trailMap, brightnessLifetimeScalar);    
+    
+    //Return if agent is NOW dead
+    if (a.alive == 0)
+    {        
+        uint slot;
+        InterlockedAdd(deadAgentCount[0], 1, slot);  
+        deadAgents[slot] = index;
+        return;
+    }
+  
+    //Leave trail 
+    LeaveTrail(a, trailMap, TRAIL_INTENSITY, deltaTime);
+    
+    
+    //Move
+    MoveAgent(a, trailMap, deltaTime, sensorDistance, sensorAngle, turnSpeed, bounce, wallAvoidanceStrength);
+    
+    
+    agents[index] = a;
+}
+
+// Diffusion kernel
+#pragma kernel DiffuseKernel
+[numthreads(1024, 1, 1)]
+void DiffuseKernel(uint3 id : SV_DispatchThreadID)
+{
+    uint width, height;
+    trailMap.GetDimensions(width, height);
+
+    uint index = id.x;
+    if (index >= width * height)
+        return;
+
+    uint y = index / width;
+    uint x = index % width;
+    uint2 pixel = uint2(x, y);
+
+    ApplyDiffusion(pixel, width, height, trailMap, PASSIVE_TRAIL_DIFFUSION_FACTOR, deltaTime, threshold);
+    ApplyPassiveReduction(pixel, trailMap, PASSIVE_TRAIL_RECUCTION, deltaTime);
+}
+
+
+
